@@ -24,9 +24,59 @@ class TopListController extends AbstractBaseApiController
     #[OA\Get(
         path: "/api/toplist",
         summary: "Get toplist based on user's geolocation",
-        description: "Returns toplist based on CF-IPCountry header. Falls back to default country or Cameroon.",
+        description: "Returns toplist based on CF-IPCountry header. Falls back to default country or Cameroon if no geolocation is available.",
+        parameters: [
+            new OA\Parameter(
+                name: "CF-IPCountry",
+                in: "header",
+                required: false,
+                schema: new OA\Schema(type: "string", example: "FR"),
+                description: "Cloudflare country code header (automatically set by Cloudflare)"
+            )
+        ],
         responses: [
-            new OA\Response(response: 200, description: "Toplist for user's location")
+            new OA\Response(
+                response: 200,
+                description: "Toplist for user's location",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "code", type: "integer", example: 200),
+                        new OA\Property(property: "status", type: "string", example: "success"),
+                        new OA\Property(property: "messages", type: "array", items: new OA\Items(type: "string")),
+                        new OA\Property(
+                            property: "data",
+                            type: "array",
+                            items: new OA\Items(
+                                properties: [
+                                    new OA\Property(property: "id", type: "integer", example: 1),
+                                    new OA\Property(property: "uuid", type: "string", example: "123e4567-e89b-12d3-a456-426614174000"),
+                                    new OA\Property(property: "position", type: "integer", example: 1),
+                                    new OA\Property(property: "is_active", type: "boolean", example: true),
+                                    new OA\Property(
+                                        property: "brand",
+                                        properties: [
+                                            new OA\Property(property: "brand_id", type: "integer", example: 1),
+                                            new OA\Property(property: "uuid", type: "string", example: "123e4567-e89b-12d3-a456-426614174001"),
+                                            new OA\Property(property: "brand_name", type: "string", example: "Casino Royal"),
+                                            new OA\Property(property: "brand_image", type: "string", example: "https://example.com/logo.png"),
+                                            new OA\Property(property: "rating", type: "integer", example: 95)
+                                        ]
+                                    ),
+                                    new OA\Property(
+                                        property: "country",
+                                        properties: [
+                                            new OA\Property(property: "id", type: "integer", example: 1),
+                                            new OA\Property(property: "uuid", type: "string", example: "123e4567-e89b-12d3-a456-426614174002"),
+                                            new OA\Property(property: "iso_code", type: "string", example: "FR"),
+                                            new OA\Property(property: "name", type: "string", example: "France")
+                                        ]
+                                    )
+                                ]
+                            )
+                        )
+                    ]
+                )
+            )
         ]
     )]
     public function getByGeolocation(Request $request)
