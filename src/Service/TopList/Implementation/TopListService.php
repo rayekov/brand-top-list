@@ -97,11 +97,33 @@ class TopListService implements ITopListService
 
     private function formatEntries(array $entries): GenericResponse
     {
-        $result = [];
+        if (empty($entries)) {
+            return $this->result([]);
+        }
+
+        $country = $entries[0]->getCountry();
+        $countryData = [
+            'id' => $country->getId(),
+            'uuid' => $country->getUuid(),
+            'iso_code' => $country->getIsoCode(),
+            'name' => $country->getName(),
+            'is_default' => $country->isDefault()
+        ];
+
+        $toplistEntries = [];
         foreach ($entries as $entry) {
             $entryOut = $this->mapper->toOut($entry);
-            $result[] = $this->mapper->toArray($entryOut);
+            $entryData = $this->mapper->toArray($entryOut);
+            // Remove country data from individual entries since it's now at the top level
+            unset($entryData['country']);
+            $toplistEntries[] = $entryData;
         }
+
+        $result = [
+            'country' => $countryData,
+            'entries' => $toplistEntries
+        ];
+
         return $this->result($result);
     }
 
