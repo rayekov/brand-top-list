@@ -5,6 +5,7 @@ namespace App\Service\TopList\Implementation;
 use App\Constant\GenericResponseStatuses;
 use App\Dto\GenericResponse;
 use App\Entity\TopList\TopListEntry;
+use App\Mapper\TopList\Interface\ITopListMapper;
 use App\Repository\Brand\BrandRepository;
 use App\Repository\Country\CountryRepository;
 use App\Repository\TopList\TopListEntryRepository;
@@ -20,15 +21,18 @@ class TopListService implements ITopListService
     private TopListEntryRepository $repository;
     private CountryRepository $countryRepository;
     private BrandRepository $brandRepository;
+    private ITopListMapper $mapper;
 
     public function __construct(
         TopListEntryRepository $repository,
         CountryRepository $countryRepository,
-        BrandRepository $brandRepository
+        BrandRepository $brandRepository,
+        ITopListMapper $mapper
     ) {
         $this->repository = $repository;
         $this->countryRepository = $countryRepository;
         $this->brandRepository = $brandRepository;
+        $this->mapper = $mapper;
     }
 
     public function getTopListByCountry(string $countryCode): GenericResponse
@@ -43,8 +47,12 @@ class TopListService implements ITopListService
             }
         }
 
-        $result = array_map([$this, 'toTopListEntryArray'], $entries);
-        
+        $result = [];
+        foreach ($entries as $entry) {
+            $entryOut = $this->mapper->toOut($entry);
+            $result[] = $this->mapper->toArray($entryOut);
+        }
+
         return $this->result($result);
     }
 
@@ -94,24 +102,25 @@ class TopListService implements ITopListService
 
         $this->persist($entry);
 
-        return $this->result($this->toTopListEntryArray($entry));
+        $entryOut = $this->mapper->toOut($entry);
+        return $this->result($this->mapper->toArray($entryOut));
     }
 
     public function updateEntry(string $uuid, Request $request): GenericResponse
     {
         $entry = $this->repository->getByUuid($uuid);
-        
+
         if (!$entry) {
             return $this->result(
-                null, 
-                GenericResponseStatuses::NOT_FOUND, 
+                null,
+                GenericResponseStatuses::NOT_FOUND,
                 Response::HTTP_NOT_FOUND,
                 ['TopList entry not found']
             );
         }
 
         $data = json_decode($request->getContent(), true);
-        
+
         if (isset($data['position'])) {
             $entry->setPosition((int)$data['position']);
         }
@@ -121,49 +130,26 @@ class TopListService implements ITopListService
 
         $this->persist($entry);
 
-        return $this->result($this->toTopListEntryArray($entry));
+        $entryOut = $this->mapper->toOut($entry);
+        return $this->result($this->mapper->toArray($entryOut));
     }
 
     public function deleteEntry(string $uuid): GenericResponse
     {
         $entry = $this->repository->getByUuid($uuid);
-        
+
         if (!$entry) {
             return $this->result(
-                null, 
-                GenericResponseStatuses::NOT_FOUND, 
+                null,
+                GenericResponseStatuses::NOT_FOUND,
                 Response::HTTP_NOT_FOUND,
                 ['TopList entry not found']
             );
         }
 
-        $this->delete($entry);
+        $this->em->remove($entry);
+        $this->em->flush();
 
         return $this->result(['message' => 'TopList entry deleted successfully']);
-    }
-
-    private function toTopListEntryArray(TopListEntry $entry): array
-    {
-        return [
-            'id' => $entry->getId(),
-            'uuid' => $entry->getUuid(),
-            'position' => $entry->getPosition(),
-            'is_active' => $entry->isActive(),
-            'brand' => [
-                'brand_id' => $entry->getBrand()->getId(),
-                'uuid' => $entry->getBrand()->getUuid(),
-                'brand_name' => $entry->getBrand()->getBrandName(),
-                'brand_image' => $entry->getBrand()->getBrandImage(),
-                'rating' => $entry->getBrand()->getRating()
-            ],
-            'country' => [
-                'id' => $entry->getCountry()->getId(),
-                'uuid' => $entry->getCountry()->getUuid(),
-                'iso_code' => $entry->getCountry()->getIsoCode(),
-                'name' => $entry->getCountry()->getName()
-            ],
-            'created_at' => $entry->getCreatedAt()?->format('Y-m-d H:i:s'),
-            'updated_at' => $entry->getUpdatedAt()?->format('Y-m-d H:i:s')
-        ];
     }
 }
