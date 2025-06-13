@@ -15,7 +15,7 @@ interface ICountryService
     
     public function update(string $uuid, Request $request): GenericResponse;
     
-    public function delete(string $uuid): GenericResponse;
+    public function deleteCountry(string $uuid): GenericResponse;
     
     public function getByIsoCode(string $isoCode): GenericResponse;
 }

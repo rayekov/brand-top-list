@@ -25,14 +25,19 @@ class CountryService implements ICountryService
     public function create(Request $request): GenericResponse
     {
         $data = json_decode($request->getContent(), true);
-        
+
         if (!$data || !isset($data['iso_code']) || !isset($data['name'])) {
             return $this->result(
-                null, 
-                GenericResponseStatuses::VALIDATION_ERROR, 
+                null,
+                GenericResponseStatuses::VALIDATION_ERROR,
                 Response::HTTP_BAD_REQUEST,
                 ['Missing required fields: iso_code, name']
             );
+        }
+
+        // If setting this country as default, unset all other defaults first. We don't need more than one default country 
+        if ($data['is_default'] ?? false) {
+            $this->unsetAllDefaults();
         }
 
         $country = new Country();
@@ -72,18 +77,23 @@ class CountryService implements ICountryService
     public function update(string $uuid, Request $request): GenericResponse
     {
         $country = $this->repository->getByUuid($uuid);
-        
+
         if (!$country) {
             return $this->result(
-                null, 
-                GenericResponseStatuses::NOT_FOUND, 
+                null,
+                GenericResponseStatuses::NOT_FOUND,
                 Response::HTTP_NOT_FOUND,
                 ['Country not found']
             );
         }
 
         $data = json_decode($request->getContent(), true);
-        
+
+        // If setting this country as default, unset all other defaults first
+        if (isset($data['is_default']) && (bool)$data['is_default']) {
+            $this->unsetAllDefaults();
+        }
+
         if (isset($data['iso_code'])) {
             $country->setIsoCode($data['iso_code']);
         }
@@ -99,7 +109,7 @@ class CountryService implements ICountryService
         return $this->result($this->toCountryArray($country));
     }
 
-    public function delete(string $uuid): GenericResponse
+    public function deleteCountry(string $uuid): GenericResponse
     {
         $country = $this->repository->getByUuid($uuid);
         
@@ -131,6 +141,16 @@ class CountryService implements ICountryService
         }
 
         return $this->result($this->toCountryArray($country));
+    }
+
+    private function unsetAllDefaults(): void
+    {
+        $defaultCountries = $this->repository->findBy(['isDefault' => true]);
+        foreach ($defaultCountries as $country) {
+            $country->setIsDefault(false);
+            $this->em->persist($country);
+        }
+        $this->em->flush();
     }
 
     private function toCountryArray(Country $country): array

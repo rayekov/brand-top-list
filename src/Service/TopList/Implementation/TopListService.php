@@ -38,35 +38,71 @@ class TopListService implements ITopListService
     public function getTopListByCountry(string $countryCode): GenericResponse
     {
         $entries = $this->repository->findTopListByCountryCode($countryCode);
-        
-        if (empty($entries)) {
-            // Fallback to default country
-            $defaultCountry = $this->countryRepository->findDefaultCountry();
-            if ($defaultCountry) {
-                $entries = $this->repository->findTopListByCountry($defaultCountry);
+
+        if (!empty($entries)) {
+            return $this->formatEntries($entries);
+        }
+
+        // Fallback to database default country
+        $defaultCountry = $this->countryRepository->findDefaultCountry();
+        if ($defaultCountry) {
+            $entries = $this->repository->findTopListByCountry($defaultCountry);
+            if (!empty($entries)) {
+                return $this->formatEntries($entries);
             }
         }
 
-        $result = [];
-        foreach ($entries as $entry) {
-            $entryOut = $this->mapper->toOut($entry);
-            $result[] = $this->mapper->toArray($entryOut);
+        // Ultimate fallback - use Cameroon (CM) if no default is set
+        if ($countryCode !== 'CM') {
+            $entries = $this->repository->findTopListByCountryCode('CM');
+            if (!empty($entries)) {
+                return $this->formatEntries($entries);
+            }
         }
 
-        return $this->result($result);
+        // If even Cameroon has no toplist, return empty
+        return $this->result([]);
     }
 
     public function getTopListByGeolocation(Request $request): GenericResponse
     {
         // Get country from CF-IPCountry header (Cloudflare)
         $countryCode = $request->headers->get('CF-IPCountry');
-        
-        if (!$countryCode) {
-            // Fallback to default country if no geolocation header
-            $countryCode = $_ENV['DEFAULT_COUNTRY_CODE'] ?? 'FR';
+
+        if ($countryCode) {
+            $entries = $this->repository->findTopListByCountryCode($countryCode);
+            if (!empty($entries)) {
+                return $this->formatEntries($entries);
+            }
         }
 
-        return $this->getTopListByCountry($countryCode);
+        // Fallback to database default country
+        $defaultCountry = $this->countryRepository->findDefaultCountry();
+        if ($defaultCountry) {
+            $entries = $this->repository->findTopListByCountry($defaultCountry);
+            if (!empty($entries)) {
+                return $this->formatEntries($entries);
+            }
+        }
+
+        // Last fallback - using my beloved Cameroon if no default is set
+        $entries = $this->repository->findTopListByCountryCode('CM');
+        if (!empty($entries)) {
+            return $this->formatEntries($entries);
+        }
+
+        // If even Cameroon has no toplist, return empty
+        return $this->result([]);
+    }
+
+    private function formatEntries(array $entries): GenericResponse
+    {
+        $result = [];
+        foreach ($entries as $entry) {
+            $entryOut = $this->mapper->toOut($entry);
+            $result[] = $this->mapper->toArray($entryOut);
+        }
+        return $this->result($result);
     }
 
     public function createEntry(Request $request): GenericResponse
