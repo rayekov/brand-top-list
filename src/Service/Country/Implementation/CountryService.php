@@ -22,7 +22,7 @@ class CountryService implements ICountryService
         $this->repository = $repository;
     }
 
-    public function create(Request $request): GenericResponse
+    public function createCountry(Request $request): GenericResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -50,7 +50,7 @@ class CountryService implements ICountryService
         return $this->result($this->toCountryArray($country));
     }
 
-    public function findAll(): GenericResponse
+    public function findAllCountries(): GenericResponse
     {
         $countries = $this->repository->findAll();
         $result = array_map([$this, 'toCountryArray'], $countries);
@@ -58,7 +58,7 @@ class CountryService implements ICountryService
         return $this->result($result);
     }
 
-    public function findOne(string $uuid): GenericResponse
+    public function findCountryByUuid(string $uuid): GenericResponse
     {
         $country = $this->repository->getByUuid($uuid);
         
@@ -74,7 +74,7 @@ class CountryService implements ICountryService
         return $this->result($this->toCountryArray($country));
     }
 
-    public function update(string $uuid, Request $request): GenericResponse
+    public function updateCountry(string $uuid, Request $request): GenericResponse
     {
         $country = $this->repository->getByUuid($uuid);
 
@@ -127,7 +127,7 @@ class CountryService implements ICountryService
         return $this->result(['message' => 'Country deleted successfully']);
     }
 
-    public function getByIsoCode(string $isoCode): GenericResponse
+    public function getCountryByIsoCode(string $isoCode): GenericResponse
     {
         $country = $this->repository->findByIsoCode($isoCode);
         

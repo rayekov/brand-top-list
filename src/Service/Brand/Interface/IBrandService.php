@@ -9,9 +9,9 @@ interface IBrandService
 {
     public function createBrand(Request $request): GenericResponse;
     
-    public function findAll(): GenericResponse;
-    
-    public function findOne(string $uuid): GenericResponse;
+    public function findAllBrands(): GenericResponse;
+
+    public function findBrandByUuid(string $uuid): GenericResponse;
     
     public function updateBrand(string $uuid, Request $request): GenericResponse;
     

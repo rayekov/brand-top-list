@@ -45,7 +45,7 @@ class BrandService implements IBrandService
         return $this->result($this->mapper->toArray($brandOut));
     }
 
-    public function findAll(): GenericResponse
+    public function findAllBrands(): GenericResponse
     {
         $brands = $this->repository->findAllOrderedByRating();
         $result = [];
@@ -58,7 +58,7 @@ class BrandService implements IBrandService
         return $this->result($result);
     }
 
-    public function findOne(string $uuid): GenericResponse
+    public function findBrandByUuid(string $uuid): GenericResponse
     {
         $brand = $this->repository->getByUuid($uuid);
 

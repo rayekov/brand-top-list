@@ -30,7 +30,7 @@ class BrandController extends AbstractBaseApiController
     )]
     public function list()
     {
-        return $this->result($this->service->findAll());
+        return $this->result($this->service->findAllBrands());
     }
 
     #[Rest\Get("/brands/{uuid}", name: "api_brands_show")]
@@ -47,7 +47,7 @@ class BrandController extends AbstractBaseApiController
     )]
     public function show(string $uuid)
     {
-        return $this->result($this->service->findOne($uuid));
+        return $this->result($this->service->findBrandByUuid($uuid));
     }
 
     #[Rest\Post("/admin/brands", name: "api_brands_create")]
@@ -71,7 +71,7 @@ class BrandController extends AbstractBaseApiController
     )]
     public function create(Request $request)
     {
-        return $this->result($this->service->create($request));
+        return $this->result($this->service->createBrand($request));
     }
 
     #[Rest\Put("/admin/brands/{uuid}", name: "api_brands_update")]
@@ -98,7 +98,7 @@ class BrandController extends AbstractBaseApiController
     )]
     public function update(string $uuid, Request $request)
     {
-        return $this->result($this->service->update($uuid, $request));
+        return $this->result($this->service->updateBrand($uuid, $request));
     }
 
     #[Rest\Delete("/admin/brands/{uuid}", name: "api_brands_delete")]
@@ -115,6 +115,6 @@ class BrandController extends AbstractBaseApiController
     )]
     public function delete(string $uuid)
     {
-        return $this->result($this->service->delete($uuid));
+        return $this->result($this->service->deleteBrand($uuid));
     }
 }

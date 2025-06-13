@@ -30,7 +30,7 @@ class CountryController extends AbstractBaseApiController
     )]
     public function list()
     {
-        return $this->result($this->service->findAll());
+        return $this->result($this->service->findAllCountries());
     }
 
     #[Rest\Get("/countries/{uuid}", name: "api_countries_show")]
@@ -47,7 +47,7 @@ class CountryController extends AbstractBaseApiController
     )]
     public function show(string $uuid)
     {
-        return $this->result($this->service->findOne($uuid));
+        return $this->result($this->service->findCountryByUuid($uuid));
     }
 
     #[Rest\Get("/countries/iso/{isoCode}", name: "api_countries_by_iso")]
@@ -70,7 +70,7 @@ class CountryController extends AbstractBaseApiController
     )]
     public function getByIsoCode(string $isoCode)
     {
-        return $this->result($this->service->getByIsoCode($isoCode));
+        return $this->result($this->service->getCountryByIsoCode($isoCode));
     }
 
     #[Rest\Post("/admin/countries", name: "api_countries_create")]
@@ -94,7 +94,7 @@ class CountryController extends AbstractBaseApiController
     )]
     public function create(Request $request)
     {
-        return $this->result($this->service->create($request));
+        return $this->result($this->service->createCountry($request));
     }
 
     #[Rest\Put("/admin/countries/{uuid}", name: "api_countries_update")]
@@ -121,7 +121,7 @@ class CountryController extends AbstractBaseApiController
     )]
     public function update(string $uuid, Request $request)
     {
-        return $this->result($this->service->update($uuid, $request));
+        return $this->result($this->service->updateCountry($uuid, $request));
     }
 
     #[Rest\Delete("/admin/countries/{uuid}", name: "api_countries_delete")]
@@ -138,6 +138,6 @@ class CountryController extends AbstractBaseApiController
     )]
     public function delete(string $uuid)
     {
-        return $this->result($this->service->delete($uuid));
+        return $this->result($this->service->deleteCountry($uuid));
     }
 }

@@ -105,7 +105,7 @@ class TopListService implements ITopListService
         return $this->result($result);
     }
 
-    public function createEntry(Request $request): GenericResponse
+    public function createTopListEntry(Request $request): GenericResponse
     {
         $data = json_decode($request->getContent(), true);
         
@@ -142,7 +142,7 @@ class TopListService implements ITopListService
         return $this->result($this->mapper->toArray($entryOut));
     }
 
-    public function updateEntry(string $uuid, Request $request): GenericResponse
+    public function updateTopListEntry(string $uuid, Request $request): GenericResponse
     {
         $entry = $this->repository->getByUuid($uuid);
 
@@ -170,7 +170,7 @@ class TopListService implements ITopListService
         return $this->result($this->mapper->toArray($entryOut));
     }
 
-    public function deleteEntry(string $uuid): GenericResponse
+    public function deleteTopListEntry(string $uuid): GenericResponse
     {
         $entry = $this->repository->getByUuid($uuid);
 

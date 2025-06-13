@@ -128,7 +128,7 @@ class TopListController extends AbstractBaseApiController
     )]
     public function create(Request $request)
     {
-        return $this->result($this->service->createEntry($request));
+        return $this->result($this->service->createTopListEntry($request));
     }
 
     #[Rest\Put("/admin/toplist/{uuid}", name: "api_toplist_update")]
@@ -154,7 +154,7 @@ class TopListController extends AbstractBaseApiController
     )]
     public function update(string $uuid, Request $request)
     {
-        return $this->result($this->service->updateEntry($uuid, $request));
+        return $this->result($this->service->updateTopListEntry($uuid, $request));
     }
 
     #[Rest\Delete("/admin/toplist/{uuid}", name: "api_toplist_delete")]
@@ -171,6 +171,6 @@ class TopListController extends AbstractBaseApiController
     )]
     public function delete(string $uuid)
     {
-        return $this->result($this->service->deleteEntry($uuid));
+        return $this->result($this->service->deleteTopListEntry($uuid));
     }
 }

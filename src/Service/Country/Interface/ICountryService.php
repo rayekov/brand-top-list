@@ -7,15 +7,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface ICountryService
 {
-    public function create(Request $request): GenericResponse;
-    
-    public function findAll(): GenericResponse;
-    
-    public function findOne(string $uuid): GenericResponse;
-    
-    public function update(string $uuid, Request $request): GenericResponse;
+    public function createCountry(Request $request): GenericResponse;
+
+    public function findAllCountries(): GenericResponse;
+
+    public function findCountryByUuid(string $uuid): GenericResponse;
+
+    public function updateCountry(string $uuid, Request $request): GenericResponse;
     
     public function deleteCountry(string $uuid): GenericResponse;
     
-    public function getByIsoCode(string $isoCode): GenericResponse;
+    public function getCountryByIsoCode(string $isoCode): GenericResponse;
 }

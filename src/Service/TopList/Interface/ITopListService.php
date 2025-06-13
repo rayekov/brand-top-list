@@ -8,12 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 interface ITopListService
 {
     public function getTopListByCountry(string $countryCode): GenericResponse;
-    
+
     public function getTopListByGeolocation(Request $request): GenericResponse;
-    
-    public function createEntry(Request $request): GenericResponse;
-    
-    public function updateEntry(string $uuid, Request $request): GenericResponse;
-    
-    public function deleteEntry(string $uuid): GenericResponse;
+
+    public function createTopListEntry(Request $request): GenericResponse;
+
+    public function updateTopListEntry(string $uuid, Request $request): GenericResponse;
+
+    public function deleteTopListEntry(string $uuid): GenericResponse;
 }
