@@ -7,8 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface ITopListService
 {
-    public function getTopListByCountry(string $countryCode): GenericResponse;
-
     public function getTopListByGeolocation(Request $request): GenericResponse;
 
     public function createTopListEntry(Request $request): GenericResponse;

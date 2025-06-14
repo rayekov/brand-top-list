@@ -25,14 +25,14 @@ class TopListController extends AbstractBaseApiController
     #[OA\Get(
         path: "/api/toplist",
         summary: "Get toplist based on user's geolocation",
-        description: "Returns toplist based on CF-IPCountry header. Falls back to default country or Cameroon if no geolocation is available.",
+        description: "Returns toplist based on CF-IPCountry header. Falls back to default toplist if no location found.",
         parameters: [
             new OA\Parameter(
                 name: "CF-IPCountry",
                 in: "header",
                 required: false,
                 schema: new OA\Schema(type: "string", example: "FR"),
-                description: "Cloudflare country code header (automatically set by Cloudflare)"
+                description: "Country code header"
             )
         ],
         responses: [
@@ -46,34 +46,44 @@ class TopListController extends AbstractBaseApiController
                         new OA\Property(property: "messages", type: "array", items: new OA\Items(type: "string")),
                         new OA\Property(
                             property: "data",
-                            type: "array",
-                            items: new OA\Items(
-                                properties: [
-                                    new OA\Property(property: "id", type: "integer", example: 1),
-                                    new OA\Property(property: "uuid", type: "string", example: "123e4567-e89b-12d3-a456-426614174000"),
-                                    new OA\Property(property: "position", type: "integer", example: 1),
-                                    new OA\Property(property: "is_active", type: "boolean", example: true),
-                                    new OA\Property(
-                                        property: "brand",
+                            properties: [
+                                new OA\Property(
+                                    property: "country",
+                                    description: "Country information (null for default toplist)",
+                                    oneOf: [
+                                        new OA\Schema(
+                                            properties: [
+                                                new OA\Property(property: "id", type: "integer", example: 1),
+                                                new OA\Property(property: "uuid", type: "string", example: "123e4567-e89b-12d3-a456-426614174002"),
+                                                new OA\Property(property: "iso_code", type: "string", example: "FR"),
+                                                new OA\Property(property: "name", type: "string", example: "France"),
+                                                new OA\Property(property: "is_default", type: "boolean", example: false)
+                                            ]
+                                        ),
+                                        new OA\Schema(type: "null")
+                                    ]
+                                ),
+                                new OA\Property(
+                                    property: "entries",
+                                    type: "array",
+                                    items: new OA\Items(
                                         properties: [
-                                            new OA\Property(property: "brand_id", type: "integer", example: 1),
-                                            new OA\Property(property: "uuid", type: "string", example: "123e4567-e89b-12d3-a456-426614174001"),
-                                            new OA\Property(property: "brand_name", type: "string", example: "Casino Royal"),
-                                            new OA\Property(property: "brand_image", type: "string", example: "https://example.com/logo.png"),
-                                            new OA\Property(property: "rating", type: "integer", example: 95)
-                                        ]
-                                    ),
-                                    new OA\Property(
-                                        property: "country",
-                                        properties: [
-                                            new OA\Property(property: "id", type: "integer", example: 1),
-                                            new OA\Property(property: "uuid", type: "string", example: "123e4567-e89b-12d3-a456-426614174002"),
-                                            new OA\Property(property: "iso_code", type: "string", example: "FR"),
-                                            new OA\Property(property: "name", type: "string", example: "France")
+                                            new OA\Property(property: "position", type: "integer", example: 1),
+                                            new OA\Property(
+                                                property: "brand",
+                                                properties: [
+                                                    new OA\Property(property: "brand_id", type: "integer", example: 1),
+                                                    new OA\Property(property: "uuid", type: "string", example: "123e4567-e89b-12d3-a456-426614174001"),
+                                                    new OA\Property(property: "brand_name", type: "string", example: "MTN Cameroon"),
+                                                    new OA\Property(property: "brand_image", type: "string", example: "https://img.co/logo.png"),
+                                                    new OA\Property(property: "rating", type: "integer", example: 95)
+                                                ]
+                                            )
                                         ]
                                     )
-                                ]
-                            )
+                                ),
+                                new OA\Property(property: "is_default", type: "boolean", example: false)
+                            ]
                         )
                     ]
                 )
@@ -85,27 +95,7 @@ class TopListController extends AbstractBaseApiController
         return $this->result($this->service->getTopListByGeolocation($request));
     }
 
-    #[Rest\Get("/toplist/{countryCode}", name: "api_toplist_country")]
-    #[OA\Get(
-        path: "/api/toplist/{countryCode}",
-        summary: "Get toplist for specific country",
-        parameters: [
-            new OA\Parameter(
-                name: "countryCode", 
-                in: "path", 
-                required: true, 
-                schema: new OA\Schema(type: "string", example: "FR"),
-                description: "ISO-2 country code (e.g., FR, US, CM)"
-            )
-        ],
-        responses: [
-            new OA\Response(response: 200, description: "Toplist for specified country")
-        ]
-    )]
-    public function getByCountry(string $countryCode)
-    {
-        return $this->result($this->service->getTopListByCountry($countryCode));
-    }
+
 
     #[Rest\Post("/admin/toplist", name: "api_toplist_create")]
     #[IsGranted('ROLE_ADMIN')]

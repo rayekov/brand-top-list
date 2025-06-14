@@ -35,38 +35,10 @@ class TopListService implements ITopListService
         $this->mapper = $mapper;
     }
 
-    public function getTopListByCountry(string $countryCode): GenericResponse
-    {
-        $entries = $this->repository->findTopListByCountryCode($countryCode);
 
-        if (!empty($entries)) {
-            return $this->formatEntries($entries);
-        }
-
-        // Fallback to database default country
-        $defaultCountry = $this->countryRepository->findDefaultCountry();
-        if ($defaultCountry) {
-            $entries = $this->repository->findTopListByCountry($defaultCountry);
-            if (!empty($entries)) {
-                return $this->formatEntries($entries);
-            }
-        }
-
-        // Ultimate fallback - use Cameroon (CM) if no default is set
-        if ($countryCode !== 'CM') {
-            $entries = $this->repository->findTopListByCountryCode('CM');
-            if (!empty($entries)) {
-                return $this->formatEntries($entries);
-            }
-        }
-
-        // If even Cameroon has no toplist, return empty
-        return $this->result([]);
-    }
 
     public function getTopListByGeolocation(Request $request): GenericResponse
     {
-        // Get country from CF-IPCountry header (Cloudflare)
         $countryCode = $request->headers->get('CF-IPCountry');
 
         if ($countryCode) {
@@ -75,24 +47,43 @@ class TopListService implements ITopListService
                 return $this->formatEntries($entries);
             }
         }
+        // If no country code is provided, or if the country has no toplist we use default
+        return $this->getDefaultTopList();
+    }
 
-        // Fallback to database default country
-        $defaultCountry = $this->countryRepository->findDefaultCountry();
-        if ($defaultCountry) {
-            $entries = $this->repository->findTopListByCountry($defaultCountry);
-            if (!empty($entries)) {
-                return $this->formatEntries($entries);
-            }
+    private function getDefaultTopList(): GenericResponse
+    {
+        // Get top 10 brands by rating
+        $topBrands = $this->brandRepository->findBy([], ['rating' => 'DESC'], 10);
+
+        if (empty($topBrands)) {
+            return $this->result([]);
         }
 
-        // Last fallback - using my beloved Cameroon if no default is set
-        $entries = $this->repository->findTopListByCountryCode('CM');
-        if (!empty($entries)) {
-            return $this->formatEntries($entries);
+        $defaultEntries = [];
+        $position = 1;
+
+        foreach ($topBrands as $brand) {
+            $defaultEntries[] = [
+                'position' => $position,
+                'brand' => [
+                    'brand_id' => $brand->getId(),
+                    'uuid' => $brand->getUuid(),
+                    'brand_name' => $brand->getBrandName(),
+                    'brand_image' => $brand->getBrandImage(),
+                    'rating' => $brand->getRating()
+                ]
+            ];
+            $position++;
         }
 
-        // If even Cameroon has no toplist, return empty
-        return $this->result([]);
+        $result = [
+            'country' => null,
+            'entries' => $defaultEntries,
+            'is_default' => true
+        ];
+
+        return $this->result($result);
     }
 
     private function formatEntries(array $entries): GenericResponse
@@ -114,7 +105,6 @@ class TopListService implements ITopListService
         foreach ($entries as $entry) {
             $entryOut = $this->mapper->toOut($entry);
             $entryData = $this->mapper->toArray($entryOut);
-            // Remove country data from individual entries since it's now at the top level
             unset($entryData['country']);
             $toplistEntries[] = $entryData;
         }
