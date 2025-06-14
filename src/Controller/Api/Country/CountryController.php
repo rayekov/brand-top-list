@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api')]
 #[OA\Tag(name: 'Countries')]
@@ -74,9 +75,11 @@ class CountryController extends AbstractBaseApiController
     }
 
     #[Rest\Post("/admin/countries", name: "api_countries_create")]
+    #[IsGranted('ROLE_ADMIN')]
     #[OA\Post(
         path: "/api/admin/countries",
         summary: "Create a new country (Admin only)",
+        security: [["Bearer" => []]],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -89,7 +92,8 @@ class CountryController extends AbstractBaseApiController
         ),
         responses: [
             new OA\Response(response: 201, description: "Country created"),
-            new OA\Response(response: 400, description: "Validation error")
+            new OA\Response(response: 400, description: "Validation error"),
+            new OA\Response(response: 401, description: "Unauthorized")
         ]
     )]
     public function create(Request $request)
@@ -98,9 +102,11 @@ class CountryController extends AbstractBaseApiController
     }
 
     #[Rest\Put("/admin/countries/{uuid}", name: "api_countries_update")]
+    #[IsGranted('ROLE_ADMIN')]
     #[OA\Put(
         path: "/api/admin/countries/{uuid}",
         summary: "Update country (Admin only)",
+        security: [["Bearer" => []]],
         parameters: [
             new OA\Parameter(name: "uuid", in: "path", required: true, schema: new OA\Schema(type: "string"))
         ],
@@ -125,9 +131,11 @@ class CountryController extends AbstractBaseApiController
     }
 
     #[Rest\Delete("/admin/countries/{uuid}", name: "api_countries_delete")]
+    #[IsGranted('ROLE_ADMIN')]
     #[OA\Delete(
         path: "/api/admin/countries/{uuid}",
         summary: "Delete country (Admin only)",
+        security: [["Bearer" => []]],
         parameters: [
             new OA\Parameter(name: "uuid", in: "path", required: true, schema: new OA\Schema(type: "string"))
         ],

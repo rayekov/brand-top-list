@@ -11,7 +11,7 @@ nelmio_api_doc:
                 - Automatic fallback to default country (Cameroon)
 
                 ## Authentication
-                Admin endpoints require authentication (todo).
+                Admin endpoints require authentication.
 
                 ## Geolocation
                 The API uses Cloudflare's CF-IPCountry header to determine user location.
@@ -22,14 +22,24 @@ nelmio_api_doc:
                 email: hervefraye@gmail.com
         servers:
             - url: http://localhost:8001
-              description: Development server
+              description: Dev server
         tags:
+            - name: Authentication
+              description: Admin authentication endpoints
             - name: TopList
               description: Geolocation-based brand toplists
             - name: Brands
               description: Brand management operations
             - name: Countries
               description: Country management operations
+        components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+        security:
+            - Bearer: []
     areas: # to filter documented areas
         path_patterns:
-            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+            - ^/api(?!/doc$) 

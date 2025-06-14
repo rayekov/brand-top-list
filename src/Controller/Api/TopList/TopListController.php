@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api')]
 #[OA\Tag(name: 'TopList')]
@@ -107,9 +108,11 @@ class TopListController extends AbstractBaseApiController
     }
 
     #[Rest\Post("/admin/toplist", name: "api_toplist_create")]
+    #[IsGranted('ROLE_ADMIN')]
     #[OA\Post(
         path: "/api/admin/toplist",
         summary: "Create toplist entry (Admin only)",
+        security: [["Bearer" => []]],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -132,9 +135,11 @@ class TopListController extends AbstractBaseApiController
     }
 
     #[Rest\Put("/admin/toplist/{uuid}", name: "api_toplist_update")]
+    #[IsGranted('ROLE_ADMIN')]
     #[OA\Put(
         path: "/api/admin/toplist/{uuid}",
         summary: "Update toplist entry (Admin only)",
+        security: [["Bearer" => []]],
         parameters: [
             new OA\Parameter(name: "uuid", in: "path", required: true, schema: new OA\Schema(type: "string"))
         ],
@@ -158,9 +163,11 @@ class TopListController extends AbstractBaseApiController
     }
 
     #[Rest\Delete("/admin/toplist/{uuid}", name: "api_toplist_delete")]
+    #[IsGranted('ROLE_ADMIN')]
     #[OA\Delete(
         path: "/api/admin/toplist/{uuid}",
         summary: "Delete toplist entry (Admin only)",
+        security: [["Bearer" => []]],
         parameters: [
             new OA\Parameter(name: "uuid", in: "path", required: true, schema: new OA\Schema(type: "string"))
         ],

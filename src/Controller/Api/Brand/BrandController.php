@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api')]
 #[OA\Tag(name: 'Brands')]
@@ -51,9 +52,11 @@ class BrandController extends AbstractBaseApiController
     }
 
     #[Rest\Post("/admin/brands", name: "api_brands_create")]
+    #[IsGranted('ROLE_ADMIN')]
     #[OA\Post(
         path: "/api/admin/brands",
         summary: "Create a new brand (Admin only)",
+        security: [["Bearer" => []]],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -66,7 +69,8 @@ class BrandController extends AbstractBaseApiController
         ),
         responses: [
             new OA\Response(response: 201, description: "Brand created"),
-            new OA\Response(response: 400, description: "Validation error")
+            new OA\Response(response: 400, description: "Validation error"),
+            new OA\Response(response: 401, description: "Unauthorized")
         ]
     )]
     public function create(Request $request)
@@ -75,6 +79,7 @@ class BrandController extends AbstractBaseApiController
     }
 
     #[Rest\Put("/admin/brands/{uuid}", name: "api_brands_update")]
+    #[IsGranted('ROLE_ADMIN')]
     #[OA\Put(
         path: "/api/admin/brands/{uuid}",
         summary: "Update brand (Admin only)",
@@ -102,6 +107,7 @@ class BrandController extends AbstractBaseApiController
     }
 
     #[Rest\Delete("/admin/brands/{uuid}", name: "api_brands_delete")]
+    #[IsGranted('ROLE_ADMIN')]
     #[OA\Delete(
         path: "/api/admin/brands/{uuid}",
         summary: "Delete brand (Admin only)",
