@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Data - Brand Top List</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="admin-body">
+    <div class="container">
+        <div class="demo-container">
+            <h1>🧪 Demo Data Generator</h1>
+            <p>This page helps you populate the database with sample data for testing the frontend.</p>
+            
+            <div class="demo-section">
+                <h2>Sample Brands</h2>
+                <p>Here are some sample brands you can add to test the system:</p>
+                
+                <div class="sample-data">
+                    <h3>Casino Brands (Example from casinoonlinefrancais.info)</h3>
+                    <ul>
+                        <li><strong>Casino Royal</strong> - Rating: 95/100</li>
+                        <li><strong>Lucky Spin</strong> - Rating: 88/100</li>
+                        <li><strong>Golden Palace</strong> - Rating: 92/100</li>
+                        <li><strong>Diamond Club</strong> - Rating: 85/100</li>
+                        <li><strong>Vegas Dreams</strong> - Rating: 90/100</li>
+                        <li><strong>Royal Flush</strong> - Rating: 87/100</li>
+                        <li><strong>Jackpot City</strong> - Rating: 93/100</li>
+                        <li><strong>Platinum Casino</strong> - Rating: 89/100</li>
+                        <li><strong>Crystal Palace</strong> - Rating: 91/100</li>
+                        <li><strong>Fortune Wheel</strong> - Rating: 86/100</li>
+                    </ul>
+                </div>
+                
+                <div class="sample-data">
+                    <h3>Sample Countries</h3>
+                    <ul>
+                        <li><strong>France (FR)</strong> - Default: No</li>
+                        <li><strong>United States (US)</strong> - Default: Yes</li>
+                        <li><strong>Germany (DE)</strong> - Default: No</li>
+                        <li><strong>United Kingdom (GB)</strong> - Default: No</li>
+                        <li><strong>Spain (ES)</strong> - Default: No</li>
+                        <li><strong>Italy (IT)</strong> - Default: No</li>
+                        <li><strong>Canada (CA)</strong> - Default: No</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="demo-actions">
+                <a href="admin.html" class="demo-btn">Go to Admin Panel</a>
+                <a href="toplist.html" class="demo-btn secondary">View Top List</a>
+            </div>
+            
+            <div class="demo-instructions">
+                <h3>📋 Setup Instructions</h3>
+                <ol>
+                    <li>Make sure your backend API is running</li>
+                    <li>Go to the Admin Panel and login</li>
+                    <li>Add some countries using the sample data above</li>
+                    <li>Add some brands with images and ratings</li>
+                    <li>Create top list entries to rank brands per country</li>
+                    <li>Test the public view by visiting the Top List page</li>
+                </ol>
+            </div>
+            
+            <div class="demo-testing">
+                <h3>🧪 Testing Features</h3>
+                <ul>
+                    <li><strong>Geolocation Testing</strong>: Use the country selector to simulate different locations</li>
+                    <li><strong>Mobile Testing</strong>: Resize your browser or use mobile device</li>
+                    <li><strong>Admin Features</strong>: Test CRUD operations in the admin panel</li>
+                    <li><strong>Error Handling</strong>: Try accessing admin features without login</li>
+                    <li><strong>Responsive Design</strong>: Check layout on different screen sizes</li>
+                </ul>
+            </div>
+            
+            <div class="demo-api-info">
+                <h3>🔗 API Endpoints</h3>
+                <p>The frontend expects these endpoints to be available:</p>
+                <ul>
+                    <li><code>GET /api/toplist</code> - Main top list endpoint</li>
+                    <li><code>GET /api/brands</code> - All brands</li>
+                    <li><code>GET /api/countries</code> - All countries</li>
+                    <li><code>POST /api/auth/login</code> - Admin login</li>
+                    <li><code>POST /api/admin/brands</code> - Create brand</li>
+                    <li><code>POST /api/admin/countries</code> - Create country</li>
+                    <li><code>POST /api/admin/toplist</code> - Create top list entry</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .demo-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .demo-container h1 {
+            color: #1f2937;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .demo-container > p {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 40px;
+        }
+
+        .demo-section {
+            margin-bottom: 40px;
+        }
+
+        .demo-section h2 {
+            color: #1f2937;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sample-data {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sample-data h3 {
+            color: #374151;
+            margin-bottom: 15px;
+        }
+
+        .sample-data ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sample-data li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .sample-data li:last-child {
+            border-bottom: none;
+        }
+
+        .demo-actions {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 0 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: #4f46e5;
+            color: white;
+        }
+
+        .demo-btn:hover {
+            background: #3730a3;
+            transform: translateY(-2px);
+        }
+
+        .demo-btn.secondary {
+            background: transparent;
+            color: #4f46e5;
+            border: 2px solid #4f46e5;
+        }
+
+        .demo-btn.secondary:hover {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .demo-instructions,
+        .demo-testing,
+        .demo-api-info {
+            background: #f1f5f9;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .demo-instructions h3,
+        .demo-testing h3,
+        .demo-api-info h3 {
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+
+        .demo-instructions ol {
+            padding-left: 20px;
+        }
+
+        .demo-instructions li,
+        .demo-testing li {
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .demo-api-info code {
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #1f2937;
+        }
+
+        @media (max-width: 768px) {
+            .demo-container {
+                padding: 25px;
+                margin: 10px 0;
+            }
+
+            .demo-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .demo-btn {
+                margin: 0;
+            }
+        }
+    </style>
+</body>
+</html>

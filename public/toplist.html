@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Top List</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">🏆 Brand Top List</h1>
+                <div class="header-actions">
+                    <button id="countrySelector" class="country-btn">
+                        <span id="currentCountry">🌍 Auto</span>
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <a href="admin.html" class="admin-link">Admin</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Country Selection Modal -->
+        <div id="countryModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Select Country</h3>
+                    <button id="closeModal" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="country-option" data-country="auto">
+                        <span class="country-name">Auto-detect</span>
+                    </div>
+                    <div id="countryList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Loading top brands...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="error-state" style="display: none;">
+            <div class="error-icon">⚠️</div>
+            <h3>Oops! Something went wrong</h3>
+            <p id="errorMessage">Unable to load the brand list. Please try again.</p>
+            <button id="retryBtn" class="retry-btn">Try Again</button>
+        </div>
+
+        <!-- Main Content -->
+        <main id="mainContent" style="display: none;">
+            <!-- Country Info -->
+            <div id="countryInfo" class="country-info">
+                <div class="country-badge">
+                    <span id="countryName">Global</span>
+                </div>
+                <p id="countryDescription">Showing top brands for your region</p>
+            </div>
+
+            <!-- Top List -->
+            <div class="toplist-container">
+                <div class="toplist-header">
+                    <h2>Top Brands</h2>
+                    <div class="list-stats">
+                        <span id="brandCount">0</span> brands
+                    </div>
+                </div>
+                
+                <div id="toplistGrid" class="toplist-grid">
+                    <!-- Brand cards will be inserted here -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2024 Brand Top List. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About</a>
+                    <a href="#" class="footer-link">Contact</a>
+                    <a href="admin.html" class="footer-link">Admin</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

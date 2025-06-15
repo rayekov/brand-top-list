@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Brand Top List</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="login-screen">
+            <div class="login-container">
+                <div class="login-header">
+                    <h1>🔐 Admin Login</h1>
+                    <p>Access the brand management panel</p>
+                </div>
+                
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required placeholder="Enter username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required placeholder="Enter password">
+                    </div>
+                    
+                    <button type="submit" class="login-btn">
+                        <span id="loginBtnText">Login</span>
+                        <div id="loginSpinner" class="btn-spinner" style="display: none;"></div>
+                    </button>
+                </form>
+                
+                <div id="loginError" class="login-error" style="display: none;"></div>
+                
+                <div class="login-footer">
+                    <a href="toplist.html" class="back-link">← Back to Top List</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" class="admin-dashboard" style="display: none;">
+            <!-- Header -->
+            <header class="admin-header">
+                <div class="admin-header-content">
+                    <h1>🛠️ Admin Panel</h1>
+                    <div class="admin-actions">
+                        <span id="adminUser" class="admin-user">Welcome, Admin</span>
+                        <button id="logoutBtn" class="logout-btn">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Navigation Tabs -->
+            <nav class="admin-nav">
+                <button class="nav-tab active" data-tab="brands">Brands</button>
+                <button class="nav-tab" data-tab="countries">Countries</button>
+                <button class="nav-tab" data-tab="toplist">Top Lists</button>
+            </nav>
+
+            <!-- Tab Content -->
+            <main class="admin-main">
+                <!-- Brands Tab -->
+                <div id="brandsTab" class="tab-content active">
+                    <div class="tab-header">
+                        <h2>Brand Management</h2>
+                        <button id="addBrandBtn" class="add-btn">+ Add Brand</button>
+                    </div>
+                    
+                    <div class="search-bar">
+                        <input type="text" id="brandSearch" placeholder="Search brands..." class="search-input">
+                    </div>
+                    
+                    <div id="brandsGrid" class="admin-grid">
+                        <!-- Brand items will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Countries Tab -->
+                <div id="countriesTab" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Country Management</h2>
+                        <button id="addCountryBtn" class="add-btn">+ Add Country</button>
+                    </div>
+                    
+                    <div class="search-bar">
+                        <input type="text" id="countrySearch" placeholder="Search countries..." class="search-input">
+                    </div>
+                    
+                    <div id="countriesGrid" class="admin-grid">
+                        <!-- Country items will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Top Lists Tab -->
+                <div id="toplistTab" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Top List Management</h2>
+                        <button id="addToplistBtn" class="add-btn">+ Add Entry</button>
+                    </div>
+                    
+                    <div class="toplist-filters">
+                        <select id="countryFilter" class="filter-select">
+                            <option value="">All Countries</option>
+                        </select>
+                    </div>
+                    
+                    <div id="toplistGrid" class="admin-grid">
+                        <!-- Toplist items will be loaded here -->
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Modals will be added via JavaScript -->
+        <div id="modalContainer"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

@@ -8,7 +8,7 @@ nelmio_api_doc:
                 ## Main Features
                 - Geolocation-based toplist retrieval using CF-IPCountry header
                 - CRUD operations for brands, countries, and toplist entries
-                - Automatic fallback to default country (Cameroon)
+                - Automatic fallback to default toplist
 
                 ## Authentication
                 Admin endpoints require authentication.
@@ -20,9 +20,6 @@ nelmio_api_doc:
             contact:
                 name: Hervé RAYE
                 email: hervefraye@gmail.com
-        servers:
-            - url: http://localhost:8001
-              description: Dev server
         tags:
             - name: Authentication
               description: Admin authentication endpoints
