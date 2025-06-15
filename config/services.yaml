@@ -18,3 +18,13 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # Service Interface Bindings
+    App\Service\Brand\Interface\IBrandService: '@App\Service\Brand\Implementation\BrandService'
+    App\Service\Country\Interface\ICountryService: '@App\Service\Country\Implementation\CountryService'
+    App\Service\TopList\Interface\ITopListService: '@App\Service\TopList\Implementation\TopListService'
+
+    # Mapper Interface Bindings
+    App\Mapper\Brand\Interface\IBrandMapper: '@App\Mapper\Brand\BrandMapper'
+    App\Mapper\Country\Interface\ICountryMapper: '@App\Mapper\Country\CountryMapper'
+    App\Mapper\TopList\Interface\ITopListMapper: '@App\Mapper\TopList\TopListMapper'

@@ -1,9 +1,42 @@
 nelmio_api_doc:
     documentation:
         info:
-            title: My App
-            description: This is an awesome app!
+            title: Brand Top List API
+            description: |
+                A RESTful API for managing brand toplists with geolocation-based configuration.
+
+                ## Main Features
+                - Geolocation-based toplist retrieval using CF-IPCountry header
+                - CRUD operations for brands, countries, and toplist entries
+                - Automatic fallback to default toplist
+
+                ## Authentication
+                Admin endpoints require authentication.
+
+                ## Geolocation
+                The API uses Cloudflare's CF-IPCountry header to determine user location.
+                If no header is present, it falls back to the default country.
             version: 1.0.0
+            contact:
+                name: Hervé RAYE
+                email: hervefraye@gmail.com
+        tags:
+            - name: Authentication
+              description: Admin authentication endpoints
+            - name: TopList
+              description: Geolocation-based brand toplists
+            - name: Brands
+              description: Brand management operations
+            - name: Countries
+              description: Country management operations
+        components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+        security:
+            - Bearer: []
     areas: # to filter documented areas
         path_patterns:
-            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+            - ^/api(?!/doc$) 

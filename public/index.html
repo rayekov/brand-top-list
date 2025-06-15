@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Top List - Welcome</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <div class="container">
+        <div class="welcome-screen">
+            <div class="welcome-container">
+                <div class="welcome-header">
+                    <h1>🏆 Brand Top List</h1>
+                    <p>Discover the best brands in your region</p>
+                </div>
+                
+                <div class="welcome-content">
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">🌍</div>
+                            <h3>Geolocation-Based</h3>
+                            <p>See brands tailored to your location</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">📱</div>
+                            <h3>Mobile-Friendly</h3>
+                            <p>Optimized for all devices</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">⭐</div>
+                            <h3>Top Rated</h3>
+                            <p>Only the highest quality brands</p>
+                        </div>
+                    </div>
+                    
+                    <div class="welcome-actions">
+                        <a href="toplist.html" class="welcome-btn primary">
+                            View Top List
+                        </a>
+                        <a href="admin.html" class="welcome-btn secondary">
+                            Admin Panel
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="welcome-footer">
+                    <p>&copy; 2024 Brand Top List. Built with PHP & JavaScript.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .welcome-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .welcome-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .welcome-header h1 {
+            font-size: 3rem;
+            color: #1f2937;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .welcome-header p {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 40px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .welcome-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-btn {
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .welcome-btn.primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .welcome-btn.primary:hover {
+            background: #3730a3;
+            transform: translateY(-2px);
+        }
+
+        .welcome-btn.secondary {
+            background: transparent;
+            color: #4f46e5;
+            border: 2px solid #4f46e5;
+        }
+
+        .welcome-btn.secondary:hover {
+            background: #4f46e5;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .welcome-footer {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .welcome-container {
+                padding: 30px 25px;
+            }
+
+            .welcome-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .welcome-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .welcome-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</body>
+</html>

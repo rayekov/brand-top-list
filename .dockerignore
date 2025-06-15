@@ -1,0 +1,52 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+compose.yaml
+compose.override.yaml
+.dockerignore
+
+# Documentation
+README.md
+*.md
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+var/log/*
+
+# Cache
+var/cache/*
+!var/cache/.gitkeep
+
+# Temporary files
+tmp/
+temp/
+
+# Node modules (if any)
+node_modules/
+
+# Environment files (will be set via docker-compose)
+.env.local
+.env.*.local
+
+# Test files
+tests/
+phpunit.xml
+.phpunit.result.cache
+
+# Development tools
+.php-cs-fixer.cache
+.phpstan.neon

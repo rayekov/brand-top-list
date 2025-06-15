@@ -12,16 +12,22 @@
         "doctrine/orm": "^3.3",
         "friendsofsymfony/rest-bundle": "^3.8",
         "jms/serializer-bundle": "^5.5",
+        "lexik/jwt-authentication-bundle": "^3.1",
         "nelmio/api-doc-bundle": "^5.3",
         "nelmio/cors-bundle": "^2.5",
+        "symfony/asset": "7.3.*",
         "symfony/console": "7.3.*",
         "symfony/dotenv": "7.3.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "7.3.*",
         "symfony/runtime": "7.3.*",
         "symfony/security-bundle": "7.3.*",
+        "symfony/twig-bundle": "7.3.*",
         "symfony/uid": "7.3.*",
-        "symfony/yaml": "7.3.*"
+        "symfony/validator": "7.3.*",
+        "symfony/yaml": "7.3.*",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
     },
     "config": {
         "allow-plugins": {
@@ -72,5 +78,9 @@
             "allow-contrib": false,
             "require": "7.3.*"
         }
+    },
+    "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^4.1",
+        "symfony/maker-bundle": "^1.63"
     }
 }

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Brand Top List</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        .debug-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .debug-section h2 {
+            color: #1f2937;
+            border-bottom: 2px solid #4f46e5;
+            padding-bottom: 10px;
+        }
+        .test-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .test-btn:hover {
+            background: #3730a3;
+            transform: translateY(-2px);
+        }
+        .result {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            color: #1f2937;
+        }
+        .error {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #dc2626;
+        }
+        .success {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+        .country-selector {
+            margin: 10px 0;
+        }
+        .country-selector select,
+        .country-selector input {
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            color: #1f2937;
+            transition: all 0.3s ease;
+        }
+        .country-selector select:focus,
+        .country-selector input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-section">
+        <h1 style="color: #1f2937; text-align: center; margin: 0; font-size: 2.5rem;">🔧 Debug Panel</h1>
+        <p style="text-align: center; color: #64748b; margin: 10px 0 0 0;">Test and debug your Brand Top List API</p>
+    </div>
+    
+    <div class="debug-section">
+        <h2>API Connection Test</h2>
+        <div class="country-selector">
+            <label>API Base URL: </label>
+            <input type="text" id="apiBaseUrl" value="http://localhost:8000" style="padding: 8px; border-radius: 4px; border: 1px solid #ccc; margin: 5px; width: 300px;">
+        </div>
+        <button class="test-btn" onclick="testConnection()">Test API Connection</button>
+        <button class="test-btn" onclick="testLoginEndpoint()">Test Login Endpoint</button>
+        <div id="connectionResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Country Detection Test</h2>
+        <div class="country-selector">
+            <label>Simulate Country: </label>
+            <select id="countrySelect">
+                <option value="auto">Auto (no header)</option>
+                <option value="FR">France (FR)</option>
+                <option value="US">United States (US)</option>
+                <option value="DE">Germany (DE)</option>
+                <option value="GB">United Kingdom (GB)</option>
+                <option value="ES">Spain (ES)</option>
+            </select>
+        </div>
+        <button class="test-btn" onclick="testTopList()">Test TopList API</button>
+        <div id="toplistResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Admin Login Test</h2>
+        <div class="country-selector">
+            <label>Username: </label>
+            <input type="text" id="loginUsername" value="admin" style="padding: 8px; border-radius: 4px; border: 1px solid #ccc; margin: 5px;">
+        </div>
+        <div class="country-selector">
+            <label>Password: </label>
+            <input type="password" id="loginPassword" value="admin123" style="padding: 8px; border-radius: 4px; border: 1px solid #ccc; margin: 5px;">
+        </div>
+        <button class="test-btn" onclick="testLogin()">Test Admin Login</button>
+        <div id="loginResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Database Content Test</h2>
+        <button class="test-btn" onclick="testBrands()">Test Brands API</button>
+        <button class="test-btn" onclick="testCountries()">Test Countries API</button>
+        <div id="brandsResult" class="result" style="display: none;"></div>
+        <div id="countriesResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Local Storage Debug</h2>
+        <button class="test-btn" onclick="showLocalStorage()">Show Local Storage</button>
+        <button class="test-btn" onclick="clearLocalStorage()">Clear Local Storage</button>
+        <div id="storageResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Quick Actions</h2>
+        <a href="toplist.html" class="test-btn">Go to TopList</a>
+        <a href="admin.html" class="test-btn">Go to Admin</a>
+        <a href="demo-data.html" class="test-btn">Demo Data</a>
+    </div>
+
+    <script>
+        function getBaseUrl() {
+            return document.getElementById('apiBaseUrl').value;
+        }
+
+        async function testConnection() {
+            const result = document.getElementById('connectionResult');
+            result.style.display = 'block';
+            result.className = 'result';
+            result.textContent = 'Testing connection...';
+
+            try {
+                const baseUrl = getBaseUrl();
+                const response = await fetch(`${baseUrl}/api/brands`);
+                const responseText = await response.text();
+
+                if (response.ok) {
+                    result.className = 'result success';
+                    result.textContent = `✅ API Connection OK\nStatus: ${response.status}\nURL: ${response.url}\n\nResponse:\n${responseText}`;
+                } else {
+                    result.className = 'result error';
+                    result.textContent = `❌ API Error\nStatus: ${response.status}\nStatusText: ${response.statusText}\n\nResponse:\n${responseText}`;
+                }
+            } catch (error) {
+                result.className = 'result error';
+                result.textContent = `❌ Connection Failed\nError: ${error.message}\n\nCheck:\n- Is Symfony server running?\n- Is the URL correct?\n- Check browser console for CORS errors`;
+            }
+        }
+
+        async function testLoginEndpoint() {
+            const result = document.getElementById('connectionResult');
+            result.style.display = 'block';
+            result.className = 'result';
+            result.textContent = 'Testing login endpoint...';
+
+            try {
+                const baseUrl = getBaseUrl();
+                const response = await fetch(`${baseUrl}/api/auth/login`, {
+                    method: 'GET'  // Just test if endpoint exists
+                });
+                const responseText = await response.text();
+
+                result.className = 'result';
+                result.textContent = `Login Endpoint Test\nStatus: ${response.status}\nURL: ${response.url}\n\nResponse:\n${responseText}`;
+            } catch (error) {
+                result.className = 'result error';
+                result.textContent = `❌ Login Endpoint Failed\nError: ${error.message}`;
+            }
+        }
+
+        async function testTopList() {
+            const result = document.getElementById('toplistResult');
+            const countrySelect = document.getElementById('countrySelect');
+            const selectedCountry = countrySelect.value;
+            
+            result.style.display = 'block';
+            result.className = 'result';
+            result.textContent = 'Testing toplist...';
+
+            try {
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+
+                if (selectedCountry !== 'auto') {
+                    headers['CF-IPCountry'] = selectedCountry;
+                }
+
+                const response = await fetch('/api/toplist', { headers });
+                const data = await response.json();
+
+                if (response.ok) {
+                    result.className = 'result success';
+                    result.textContent = `✅ TopList API Success\n\nHeaders sent: ${JSON.stringify(headers, null, 2)}\n\nResponse:\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    result.className = 'result error';
+                    result.textContent = `❌ TopList API Error\nStatus: ${response.status}\nResponse: ${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                result.className = 'result error';
+                result.textContent = `❌ TopList Test Failed\nError: ${error.message}`;
+            }
+        }
+
+        async function testBrands() {
+            const result = document.getElementById('brandsResult');
+            result.style.display = 'block';
+            result.className = 'result';
+            result.textContent = 'Testing brands...';
+
+            try {
+                const response = await fetch('/api/brands');
+                const data = await response.json();
+
+                if (response.ok) {
+                    result.className = 'result success';
+                    const brandCount = data.data ? data.data.length : 0;
+                    result.textContent = `✅ Brands API Success\nFound ${brandCount} brands\n\nResponse:\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    result.className = 'result error';
+                    result.textContent = `❌ Brands API Error\nStatus: ${response.status}\nResponse: ${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                result.className = 'result error';
+                result.textContent = `❌ Brands Test Failed\nError: ${error.message}`;
+            }
+        }
+
+        async function testCountries() {
+            const result = document.getElementById('countriesResult');
+            result.style.display = 'block';
+            result.className = 'result';
+            result.textContent = 'Testing countries...';
+
+            try {
+                const response = await fetch('/api/countries');
+                const data = await response.json();
+
+                if (response.ok) {
+                    result.className = 'result success';
+                    const countryCount = data.data ? data.data.length : 0;
+                    result.textContent = `✅ Countries API Success\nFound ${countryCount} countries\n\nResponse:\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    result.className = 'result error';
+                    result.textContent = `❌ Countries API Error\nStatus: ${response.status}\nResponse: ${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                result.className = 'result error';
+                result.textContent = `❌ Countries Test Failed\nError: ${error.message}`;
+            }
+        }
+
+        function showLocalStorage() {
+            const result = document.getElementById('storageResult');
+            result.style.display = 'block';
+            result.className = 'result';
+            
+            const storage = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                storage[key] = localStorage.getItem(key);
+            }
+            
+            result.textContent = `Local Storage Contents:\n${JSON.stringify(storage, null, 2)}`;
+        }
+
+        function clearLocalStorage() {
+            localStorage.clear();
+            const result = document.getElementById('storageResult');
+            result.style.display = 'block';
+            result.className = 'result success';
+            result.textContent = '✅ Local Storage Cleared';
+        }
+
+        async function testLogin() {
+            const result = document.getElementById('loginResult');
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const baseUrl = getBaseUrl();
+
+            result.style.display = 'block';
+            result.className = 'result';
+            result.textContent = 'Testing login...';
+
+            try {
+                const response = await fetch(`${baseUrl}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const responseText = await response.text();
+                console.log('Raw response:', responseText);
+
+                // Try to parse as JSON
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (parseError) {
+                    result.className = 'result error';
+                    result.textContent = `❌ Invalid JSON Response\nStatus: ${response.status}\nParse Error: ${parseError.message}\n\nRaw Response:\n${responseText}`;
+                    return;
+                }
+
+                if (response.ok) {
+                    result.className = 'result success';
+                    result.textContent = `✅ Login Success!\n\nStatus: ${response.status}\nToken received: ${data.token ? 'Yes' : 'No'}\n\nFull Response:\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    result.className = 'result error';
+                    result.textContent = `❌ Login Failed\nStatus: ${response.status}\nStatusText: ${response.statusText}\n\nResponse:\n${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                result.className = 'result error';
+                result.textContent = `❌ Login Error\nError: ${error.message}\n\nThis might indicate:\n- Symfony server not running\n- Wrong URL/Port\n- CORS issues\n- Server returning HTML error page`;
+            }
+        }
+    </script>
+</body>
+</html>
