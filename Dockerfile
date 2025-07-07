@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     default-mysql-client \
-    nginx \
+    apache2 \
     openssl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -33,27 +33,25 @@ RUN composer install --optimize-autoloader --no-scripts
 # Copy application code
 COPY . .
 
+RUN ls -l /var/www/html
+
+RUN mkdir -p /var/www/html/var
+
 # Set proper permissions 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
     && chmod -R 777 /var/www/html/var
 
-# Configure nginx
-COPY docker/nginx.conf /etc/nginx/sites-available/default
-RUN rm /etc/nginx/sites-enabled/default \
-    && ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+# Configure Apache
+COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
+RUN a2enmod rewrite proxy proxy_fcgi
 
-# Generate JWT keys
-RUN mkdir -p config/jwt \
-    && openssl genpkey -algorithm RSA -out config/jwt/private.pem -pkcs8 -pass pass: \
-    && openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem -passin pass: \
-    && chown -R www-data:www-data config/jwt \
-    && chmod 600 config/jwt/private.pem \
-    && chmod 644 config/jwt/public.pem
-
+# Copy start.sh script
 COPY docker/start.sh /start.sh
 RUN chmod +x /start.sh
 
-EXPOSE 8000
+# Expose port 80 for Apache
+EXPOSE 80
 
+# Start Apache and PHP-FPM
 CMD ["/start.sh"]

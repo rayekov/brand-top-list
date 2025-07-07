@@ -1,6 +1,4 @@
 
-version: '3.8'
-
 services:
   database:
     image: mysql:8.0
@@ -29,7 +27,7 @@ services:
       dockerfile: Dockerfile
     container_name: brand_toplist_app
     ports:
-      - "8000:8000"
+      - "8011:80"
     depends_on:
       database:
         condition: service_healthy

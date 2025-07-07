@@ -9,6 +9,8 @@ abstract class AbstractBaseApiController extends AbstractFOSRestController
 {
     public function result(GenericResponse $result)
     {
-        return $this->view($result->toArray(), $result->getCode());
+        $view = $this->view($result->toArray(), $result->getCode());
+        $view->setFormat('json');
+        return $view;
     }
 }
