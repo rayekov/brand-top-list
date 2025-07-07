@@ -1,6 +1,4 @@
 
-version: '3.8'
-
 services:
   database:
     image: mysql:8.0
@@ -29,7 +27,7 @@ services:
       dockerfile: Dockerfile
     container_name: brand_toplist_app
     ports:
-      - "8000:8000"
+      - "8011:80"
     depends_on:
       database:
         condition: service_healthy
@@ -44,6 +42,7 @@ services:
       JWT_PASSPHRASE: ""
     volumes:
       - app_var:/var/www/html/var
+      - jwt_keys:/var/www/html/config/jwt
     networks:
       - brand_toplist_network
     restart: unless-stopped
@@ -52,6 +51,8 @@ volumes:
   database_data:
     driver: local
   app_var:
+    driver: local
+  jwt_keys:
     driver: local
 
 networks:
