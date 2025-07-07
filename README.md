@@ -54,14 +54,15 @@ php -S localhost:8000 -t public/
 
 ### 6. Access the Application
 - **Frontend**: http://localhost:8000
-- **Admin Panel**: http://localhost:8000/admin.html
+- **Admin UI**: http://localhost:8000/admin.html
 - **API Documentation**: http://localhost:8000/api/doc
 
-### 7. Default Credentials
+### 7. Admin Authentication
+- **Login Endpoint**: `POST http://localhost:8000/api/auth/login`
 - **Username**: `admin`
 - **Password**: `admin123`
 
-## �🚀 Quick Start (Docker)
+## 🐳🚀 Quick Start (Docker) - Recommended
 
 ### Prerequisites
 - Docker & Docker Compose installed
@@ -74,14 +75,27 @@ cd brand-top-list
 docker-compose up --build
 ```
 
-### 2. Access the Application
-- **Frontend**: http://localhost:8000
-- **Admin Panel**: http://localhost:8000/admin.html
-- **API Documentation**: http://localhost:8000/api/doc
+**That's it!** The application will automatically:
+- ✅ Set up the database and run migrations
+- ✅ Load demo data (brands, countries, toplists)
+- ✅ Generate JWT authentication keys
+- ✅ Start all services
 
-### 3. Default Credentials
+### 2. Access the Application
+- **Frontend**: http://localhost:8011
+- **Admin UI**: http://localhost:8011/admin.html
+- **API Documentation**: http://localhost:8011/api/doc
+
+### 3. Admin Authentication
+- **Login Endpoint**: `POST http://localhost:8011/api/auth/login`
 - **Username**: `admin`
 - **Password**: `admin123`
+- **Example**:
+  ```bash
+  curl -X POST http://localhost:8011/api/auth/login \
+    -H 'Content-Type: application/json' \
+    -d '{"username":"admin","password":"admin123"}'
+  ```
 
 ## 📋 Features
 
@@ -150,14 +164,14 @@ symfony server:start
 ### API Testing
 1. **Get JWT Token**:
    ```bash
-   curl -X POST http://localhost:8000/api/auth/login \
+   curl -X POST http://localhost:8011/api/auth/login \
      -H "Content-Type: application/json" \
      -d '{"username":"admin","password":"admin123"}'
    ```
 
 2. **Use Token**:
    ```bash
-   curl -X GET http://localhost:8000/api/admin/brands \
+   curl -X GET http://localhost:8011/api/admin/brands \
      -H "Authorization: Bearer YOUR_TOKEN_HERE"
    ```
 
@@ -185,7 +199,7 @@ symfony server:start
 
 ## 📖 API Documentation
 
-Visit http://localhost:8000/api/doc for interactive API documentation with:
+Visit http://localhost:8011/api/doc for interactive API documentation with:
 - Complete endpoint listing
 - Request/response examples
 - Authentication testing
@@ -202,7 +216,7 @@ The application includes demo data with:
 
 ### Common Issues
 
-1. **Port 8000 already in use**:
+1. **Port 8011 already in use**:
    ```bash
    docker-compose down
    # Change port in compose.yaml if needed
@@ -210,11 +224,17 @@ The application includes demo data with:
 
 2. **Database connection issues**:
    ```bash
-   docker-compose logs database
-   docker-compose restart database
+   docker-compose logs db
+   docker-compose restart db
    ```
 
-3. **Permission issues**:
+3. **JWT Authentication errors**:
+   ```bash
+   # JWT keys are generated automatically, but if issues persist:
+   docker-compose exec app php bin/console lexik:jwt:generate-keypair --skip-if-exists
+   ```
+
+4. **Permission issues**:
    ```bash
    docker-compose exec app chown -R www-data:www-data /var/www/html/var
    ```
@@ -225,16 +245,16 @@ The application includes demo data with:
 docker-compose logs app
 
 # Database logs
-docker-compose logs database
+docker-compose logs db
 
 # Follow logs
 docker-compose logs -f
 ```
 
-## 📞 Support
+## �📞 Support
 
 For questions or issues, please check:
-1. API Documentation: http://localhost:8000/api/doc
+1. API Documentation: http://localhost:8011/api/doc
 2. Application logs: `docker-compose logs app`
 3. Database status: `docker-compose ps`
 
