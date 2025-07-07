@@ -42,6 +42,7 @@ services:
       JWT_PASSPHRASE: ""
     volumes:
       - app_var:/var/www/html/var
+      - jwt_keys:/var/www/html/config/jwt
     networks:
       - brand_toplist_network
     restart: unless-stopped
@@ -50,6 +51,8 @@ volumes:
   database_data:
     driver: local
   app_var:
+    driver: local
+  jwt_keys:
     driver: local
 
 networks:

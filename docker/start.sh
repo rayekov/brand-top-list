@@ -12,6 +12,12 @@ while ! php bin/console doctrine:query:sql "SELECT 1" > /dev/null 2>&1; do
 done
 echo "Database is ready!"
 
+# Generate JWT keys if they don't exist
+if [ ! -f "config/jwt/private.pem" ] || [ ! -f "config/jwt/public.pem" ]; then
+    echo "Generating JWT keypair..."
+    php bin/console lexik:jwt:generate-keypair --skip-if-exists
+fi
+
 # Run database migrations
 echo "Running database migrations..."
 php bin/console doctrine:migrations:migrate --no-interaction
@@ -43,12 +49,14 @@ echo "Application is ready!"
 echo ""
 echo "Access URLs:"
 echo "  Frontend: http://localhost:8011"
-echo "  Admin:    http://localhost:8011/admin.html"
+echo "  Admin UI: http://localhost:8011/admin.html"
 echo "  API Docs: http://localhost:8011/api/doc"
 echo ""
-echo "Default Admin Credentials:"
-echo "  Username: admin"
-echo "  Password: admin123"
+echo "Admin Authentication:"
+echo "  Login URL: POST http://localhost:8011/api/auth/login"
+echo "  Username:  admin"
+echo "  Password:  admin123"
+echo "  Example:   curl -X POST http://localhost:8011/api/auth/login -H 'Content-Type: application/json' -d '{\"username\":\"admin\",\"password\":\"admin123\"}'"
 echo ""
 
 # Keep container running by following Apache logs
